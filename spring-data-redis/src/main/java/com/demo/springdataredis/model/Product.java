@@ -1,5 +1,7 @@
 package com.demo.springdataredis.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,8 +15,10 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "product")
 @Accessors(chain = true)
-public class Product {
+public class Product implements Serializable {
 	
+	private static final long serialVersionUID = 7328527175502615992L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

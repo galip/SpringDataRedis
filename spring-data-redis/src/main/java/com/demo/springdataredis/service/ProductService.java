@@ -9,6 +9,8 @@ public interface ProductService {
 	
 	List<Product> getAllProducts();
 	
+	Product getProductById(long productId);
+	
 	Product save(CreateProductRequest productRequest);
 
 }

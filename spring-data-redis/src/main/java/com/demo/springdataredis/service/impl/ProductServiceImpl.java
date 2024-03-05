@@ -1,6 +1,7 @@
 package com.demo.springdataredis.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,12 @@ public class ProductServiceImpl implements ProductService {
 		product.setPrice(productRequest.getPrice());
 		product.setDescription(productRequest.getDescription());
 		return productRepository.save(product);
+	}
+
+	@Override
+	public Product getProductById(long productId) {
+		Optional<Product> productOpt = productRepository.findById(productId);
+		return productOpt.isPresent() ? productOpt.get() : new Product();
 	}
 
 }
