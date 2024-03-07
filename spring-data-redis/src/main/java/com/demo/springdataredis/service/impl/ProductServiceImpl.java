@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.demo.springdataredis.model.Product;
@@ -18,7 +19,9 @@ public class ProductServiceImpl implements ProductService {
 	ProductRepository productRepository;
 
 	@Override
+	@Cacheable(value = "product")
 	public List<Product> getAllProducts() {
+		getLongProcess();
 		return productRepository.findAll();
 	}
 
@@ -32,9 +35,19 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Cacheable(value = "product", key = "#productId")
 	public Product getProductById(long productId) {
+		getLongProcess();
 		Optional<Product> productOpt = productRepository.findById(productId);
 		return productOpt.isPresent() ? productOpt.get() : new Product();
+	}
+	
+	private void getLongProcess() {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
