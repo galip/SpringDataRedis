@@ -12,7 +12,10 @@ import com.demo.springdataredis.repository.ProductRepository;
 import com.demo.springdataredis.request.CreateProductRequest;
 import com.demo.springdataredis.service.ProductService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
@@ -46,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			log.error("Exception occured: " + e);
 		}
 	}
 
