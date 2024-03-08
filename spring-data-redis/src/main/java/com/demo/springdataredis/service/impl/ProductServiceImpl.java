@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import com.demo.springdataredis.model.Product;
@@ -29,6 +31,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Caching(
+		    evict = {
+		        @CacheEvict(value = "product", allEntries = true)
+		    }
+		)
 	public Product save(CreateProductRequest productRequest) {
 		Product product = new Product();
 		product.setName(productRequest.getName());
