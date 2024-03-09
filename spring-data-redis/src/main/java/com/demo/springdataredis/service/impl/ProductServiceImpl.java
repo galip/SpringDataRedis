@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import com.demo.springdataredis.mapper.ProductMapper;
 import com.demo.springdataredis.model.Product;
 import com.demo.springdataredis.repository.ProductRepository;
 import com.demo.springdataredis.request.CreateProductRequest;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class ProductServiceImpl implements ProductService {
-	
+
 	@Autowired
 	ProductRepository productRepository;
 
@@ -31,16 +32,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Caching(
-		    evict = {
-		        @CacheEvict(value = "product", allEntries = true)
-		    }
-		)
+	@Caching(evict = { @CacheEvict(value = "product", allEntries = true) })
 	public Product save(CreateProductRequest productRequest) {
-		Product product = new Product();
-		product.setName(productRequest.getName());
-		product.setPrice(productRequest.getPrice());
-		product.setDescription(productRequest.getDescription());
+		Product product = ProductMapper.convertToProduct(productRequest);
 		return productRepository.save(product);
 	}
 
@@ -51,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Product> productOpt = productRepository.findById(productId);
 		return productOpt.isPresent() ? productOpt.get() : new Product();
 	}
-	
+
 	private void getLongProcess() {
 		try {
 			Thread.sleep(5000);
@@ -59,5 +53,4 @@ public class ProductServiceImpl implements ProductService {
 			log.error("Exception occured: " + e);
 		}
 	}
-
 }
